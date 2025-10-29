@@ -2,144 +2,101 @@
 
 ## Quick Installation for Arch Linux
 
-### 1. Install Dependencies
+The script **auto-detects your network management tool** and configures accordingly!
+
+### 1. Run the Installer
 
 ```bash
-sudo pacman -S python3 networkmanager iwd wpa_supplicant
-```
-
-### 2. Run the Installer
-
-```bash
-# Interactive mode (recommended for first-time users)
-python3 installer/eduroam-linux-TUoAS-eduroam_students.py
-
-# Silent mode
 python3 installer/eduroam-linux-TUoAS-eduroam_students.py \
     --silent \
     --username your_username@turkuamk.fi \
     --password your_password
 ```
 
-### 3. That's it! ✅
+### 2. That's it! ✅
 
-The script auto-detects which backend to use:
-- **NetworkManager** (if you have GNOME/KDE with NM)
-- **iwd** (if you have iwd installed)
-- **wpa_supplicant** (fallback - always available)
+The script will automatically:
+- Detect NetworkManager, iwd, or wpa_supplicant (whichever is installed)
+- Generate appropriate config
+- Install with correct permissions
+- You're connected to eduroam!
 
-## Arch-Specific Configuration
+## What Gets Installed?
 
-### For Systemd Users
+Depending on what's available on your system:
 
-If using systemd-networkd with iwd:
+| System Setup | Detected | Config Location |
+|---|---|---|
+| GNOME/KDE with NetworkManager | ✅ NM | DBus system bus |
+| systemd + iwd | ✅ iwd | `/var/lib/iwd/eduroam.8021x` |
+| Minimal/server + wpa_supplicant | ✅ wpa | `~/.config/cat_installer/` |
+
+No manual setup needed - the script handles it all!
+
+## See What Backend Was Chosen
+
+Run with `--debug` to see which backend was auto-detected:
 
 ```bash
-# Enable iwd
-sudo systemctl enable iwd.service
-sudo systemctl start iwd.service
-
-# Run installer
-python3 installer/eduroam-linux-TUoAS-eduroam_students.py --install-iwd
-```
-
-### For NetworkManager Users
-
-```bash
-# Enable NetworkManager
-sudo systemctl enable NetworkManager.service
-sudo systemctl start NetworkManager.service
-
-# Run installer (will auto-detect NM)
-python3 installer/eduroam-linux-TUoAS-eduroam_students.py --silent \
+python3 installer/eduroam-linux-TUoAS-eduroam_students.py \
+    --silent \
     --username user@turkuamk.fi \
-    --password pass
+    --password pass \
+    --debug
+
+# Look for: DEBUG:Backend selection: ...
 ```
 
-### For wpa_supplicant Users
+## Verification
+
+### Verify Installation
+
+Check if config was created for your backend:
 
 ```bash
-# Generate config
-python3 installer/eduroam-linux-TUoAS-eduroam_students.py --wpa_conf
+# For NetworkManager
+nmcli con show eduroam
 
-# Connect (manual)
-sudo wpa_supplicant -B -i wlan0 -c ~/.config/cat_installer/cat_installer.conf
-dhclient wlan0
+# For iwd
+sudo cat /var/lib/iwd/eduroam.8021x | head -5
+
+# For wpa_supplicant
+cat ~/.config/cat_installer/cat_installer.conf | head -5
 ```
 
-## Arch-Specific Notes
-
-### Minimal Installation (no NM, no iwd)
-If you only have wpa_supplicant:
-
-```bash
-sudo pacman -S wpa_supplicant
-python3 installer/eduroam-linux-TUoAS-eduroam_students.py --wpa_conf
-```
-
-### iwd Recommended for Arch
-iwd is lightweight and modern - recommended for Arch users:
-
-```bash
-sudo pacman -S iwd
-python3 installer/eduroam-linux-TUoAS-eduroam_students.py --install-iwd
-```
-
-## Troubleshooting on Arch
-
-### "Module not found: dbus"
-```bash
-sudo pacman -S dbus python-dbus
-```
+## Troubleshooting
 
 ### "iwd connection fails (bad_certificate)"
-Switch to wpa_supplicant:
+
+iwd has stricter certificate validation. The script handles this by using wpa_supplicant which is more compatible.
+
+If you need to force wpa_supplicant:
+
 ```bash
 python3 installer/eduroam-linux-TUoAS-eduroam_students.py --wpa_conf
 ```
 
-### "Permission denied for /var/lib/iwd"
-Use pkexec (usually works) or run as root:
+Then manually connect:
 ```bash
-sudo python3 installer/eduroam-linux-TUoAS-eduroam_students.py --install-iwd
+sudo wpa_supplicant -B -i wlan0 -c ~/.config/cat_installer/cat_installer.conf
 ```
 
-## Testing Connection
+### Which backend was selected?
 
-### For NetworkManager
-```bash
-nmcli con show eduroam
-nmcli con up eduroam
-```
-
-### For iwd
-```bash
-sudo iwctl
-# In iwctl prompt:
-station wlan0 show
-```
-
-### For wpa_supplicant
-```bash
-sudo wpa_supplicant -i wlan0 -c ~/.config/cat_installer/cat_installer.conf -v
-```
-
-## AUR Package (Future)
-
-Coming soon! eduroam-linux-installer
-
-## Support
-
-For Arch-specific issues, check:
-- [Arch Wiki - iwd](https://wiki.archlinux.org/title/Iwd)
-- [Arch Wiki - NetworkManager](https://wiki.archlinux.org/title/NetworkManager)
-- [Arch Wiki - wpa_supplicant](https://wiki.archlinux.org/title/Wpa_supplicant)
-
-Or run with `--debug` flag to see what was auto-selected:
+Check the debug output:
 
 ```bash
 python3 installer/eduroam-linux-TUoAS-eduroam_students.py --debug
 ```
+
+Look for: `DEBUG:Backend selection: ...`
+
+## Support
+
+For Arch-specific issues:
+- [Arch Wiki - iwd](https://wiki.archlinux.org/title/Iwd)
+- [Arch Wiki - NetworkManager](https://wiki.archlinux.org/title/NetworkManager)
+- [Arch Wiki - wpa_supplicant](https://wiki.archlinux.org/title/Wpa_supplicant)
 
 ---
 

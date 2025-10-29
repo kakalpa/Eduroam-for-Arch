@@ -1,4 +1,4 @@
-# iwd (Intel Wireless Daemon) - eduroam Setup Guide
+# iwd (Intel Wireless Daemon) - eduroam Configuration
 
 ## What is iwd?
 
@@ -8,52 +8,25 @@
 - ✅ Simple to configure
 - ✅ Part of iNet Wireless Daemon project
 
-## Quick Setup for iwd
+## Automatic Detection
 
-### 1. Install iwd
-
-```bash
-# Arch Linux
-sudo pacman -S iwd
-
-# Ubuntu/Debian
-sudo apt install iwd
-
-# Fedora
-sudo dnf install iwd
-```
-
-### 2. Run eduroam Installer
+If you have iwd installed, the eduroam installer will **automatically detect it** and configure accordingly:
 
 ```bash
-# Let it auto-detect iwd
 python3 installer/eduroam-linux-TUoAS-eduroam_students.py \
     --silent \
     --username user@institution.edu \
     --password pass
-
-# Or explicitly install to iwd
-python3 installer/eduroam-linux-TUoAS-eduroam_students.py \
-    --install-iwd \
-    --silent \
-    --username user@institution.edu \
-    --password pass
 ```
 
-### 3. Start iwd Daemon
+The script will:
+1. ✅ Detect iwd is available
+2. ✅ Generate eduroam config for iwd
+3. ✅ Install to `/var/lib/iwd/eduroam.8021x` 
+4. ✅ Set correct permissions (600, root:root)
+5. ✅ Done! iwd daemon uses it automatically
 
-```bash
-# Enable and start
-sudo systemctl enable iwd.service
-sudo systemctl start iwd.service
-
-# Verify it's running
-sudo systemctl status iwd.service
-```
-
-### 4. Connect to eduroam
-
-iwd will automatically use the config once installed!
+No extra steps needed!
 
 ## Manual Configuration (Advanced)
 
