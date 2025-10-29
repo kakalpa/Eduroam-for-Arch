@@ -2,6 +2,8 @@
 
 A single-file CAT (Configuration Assistant Tool) Linux installer for eduroam WiFi configuration with **fully automatic backend detection**.
 
+For Turku University of Applied Sciences students 
+
 ## Features
 
 ✅ **Automatic Backend Detection**
