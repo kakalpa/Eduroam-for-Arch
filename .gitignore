@@ -1,0 +1,74 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# User configs
+.config/cat_installer/
+*.8021x
+
+# Temporary
+*.tmp
+*.bak
+.tmp/
+
+# Local documentation (keep these locally, don't push)
+docs/*.md
+QUICK_REFERENCE.md
+AUTOMATED_SELECTION_GUIDE.md
+AUTOMATION_IMPLEMENTATION.md
+BACKEND_LOGIC_EXPLAINED.md
+INSTALLATION_SUCCESS.md
+COMPLETE_SUMMARY.md
+FIX_SUMMARY.md
+MISSION_ACCOMPLISHED.md
+INDEX.md
+
+# Config files with passwords (security)
+*config*.local
+*.password
+*.cred
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.deb
+*.rpm
+*.tar.gz
