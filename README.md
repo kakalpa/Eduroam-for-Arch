@@ -214,14 +214,6 @@ See [COPYING](COPYING) for license information.
 - iwd/Automation Enhancement: Oct 2025
 - Contributors: See top of installer script
 
-## Support
-
-For issues, please check:
-1. [docs/README.md](docs/README.md)
-2. [docs/QUICK_REFERENCE.md](docs/QUICK_REFERENCE.md)
-3. Run with `--debug` flag
-4. See relevant guide (arch/iwd) for specific issues
-
 ---
 
 **Status:** ✅ Production Ready  
